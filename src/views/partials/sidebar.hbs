@@ -1,0 +1,62 @@
+<div class="card mb-3">
+    <div class="card-header bg-dark text-white">
+        <h5>
+            <i class="far fa-chart-bar"></i> Stats
+        </h5>
+    </div>
+    <div class="card-body">
+        <p><i class="fas fa-images"></i> Images: {{stasts.totalImages}}</p>
+        <p><i class="fas fa-comments"></i> Comments: {{stasts.totalComments}}</p>
+        <p><i class="fas fa-eye"></i> Views: {{stasts.totalViews}}</p>
+        <p><i class="fas fa-heart"></i> Likes: {{stasts.totalLikes}}</p>
+    </div>
+</div>
+
+<div class="card mb-3">
+    
+    <div class="card-header bg-dark text-white">
+        <h5>
+            <i class="fas fa-fire"></i> Most Popular
+        </h5>
+    </div>
+    
+    <div class="card-body">
+        <div class="row">
+            {{#each stasts.popularImages}}
+            <div class="col-md-4 mb-3">
+                <a href="/images/{{_id}}">
+                    <img src="{{url}}" class="w-100 img-thumbnail">
+                </a>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    
+</div>
+
+<div class="card mt-2">
+    <div class="card-header bg-dark text-white">
+        <h5>
+            <i class="fas fa-comments"></i> Latest Comments
+        </h5>
+    </div>
+    <div class="card-body">
+        {{#each stasts.recentComments}}
+        <div class="row">
+            <div class="col">
+                <a href="/images/{{image._id}}">
+                    <img src="{{image.url}}" class="img-thumbnail w-70">
+                </a>
+            </div>
+            <div class="col">
+                <blockquote class="w-100">
+                    <p>{{comment}}</p>
+                    <footer class="blockquote-footer">
+                        <span>{{timeago created_at}}</span>
+                    </footer>
+                </blockquote>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>

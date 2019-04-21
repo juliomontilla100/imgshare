@@ -1,0 +1,70 @@
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2>{{ image.title }}</h2>
+        <a href="/images/{{image._id}}/remove" class="btn btn-danger">
+            <i class="fa fa-times"></i> Delete
+        </a>
+    </div>
+    <div class="card-body">
+        <p>{{ image.description }}</p>
+        <div class="text-center">
+            <img src="{{image.url}}" class="img-fluid">
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between align-items-center">
+        <a href="/images/{{image._id}}/like" class="btn btn-primary" id="btn-like">
+            <i class="fas fa-thumbs-up"></i> Like
+        </a>
+        <p>
+            <span class="likes-count">{{image.likes.length}}</span>
+            <i class="fas fa-heart"></i>
+        </p>
+        <p>
+            <i class="fas fa-eye"></i> {{image.views}}
+        </p>
+        <p>
+            <i class="far fa-clock"></i>
+            {{timeago image.created_at}}
+        </p>
+    </div>
+</div>
+
+<div class="card mt-2">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3>Comments</h3>
+        {{!-- <button class="btn btn-info" id="btn-toggle-comment">
+            <i class="fa fa-comments-o"></i> Post a Comment
+        </button> --}}
+    </div>
+    <div class="card-body">
+        <blockquote id="post-comment">
+            <form action="/images/{{image._id}}/comment" method="POST">
+                <div class="form-group">
+                    <textarea name="comment" class="form-control" rows="2" placeholder="Your Comment"></textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success" id="btn-comment">
+                        <i class="fa fa-comment"></i> Post
+                    </button>
+                </div>
+            </form>      
+        </blockquote>
+        <ul class="list-group pl-4 pt-2">
+            {{#each image.comments}}
+            <li class="list-group-item mb-3">
+                <div class="row">
+                    <div class="col-md-2">
+                        <img src="http://www.jdevoto.cl/web/wp-content/uploads/2018/04/default-user-img.jpg" class="img-fluid rounded-circle">
+                    </div>
+                    <blockquote class="col">
+                        <p class="lead">{{comment}}</p>
+                        <footer class="blockquote-footer">
+                            {{timeago created_at}}
+                        </footer>
+                    </blockquote>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>
