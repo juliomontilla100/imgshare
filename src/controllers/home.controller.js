@@ -1,14 +1,58 @@
 const Image = require('../models/image.model')
 const Stasts = require('../utils/stasts')
+const User = require('../models/user.model')
 
 let ctrl = {}
 
 ctrl.index = async (req,res) => {
+
+    if(req.isAuthenticated()){
+        res.render('feed')
+    } else{
+        res.render('index')
+    }
+    
+}
+
+ctrl.profile = async (req,res) => {
     
     let stasts = await Stasts()
 
     let images = await Image.find({}).sort({created_at: -1})
-    res.render('index', {images, stasts})
+    res.render('profile', {images, stasts})
+    
+}
+
+ctrl.signin = async (req,res) => {
+    
+    res.render('signin')
+     
+}
+
+ctrl.signup = async (req,res) => {
+    
+    res.render('signup')
+     
+ }
+
+ctrl.newuser = async (req,res) => {
+    
+   let body = req.body
+
+   let newUser = await new User({
+       username: body.username,
+       password: body.password,
+       email: body.email,
+   }).save()
+
+   res.send(newUser)
+    
+}
+
+ctrl.logout = async (req,res) => {
+    
+    req.logout()
+    res.redirect('/')
     
 }
 

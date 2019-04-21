@@ -89,7 +89,7 @@ ctrl.remove = async (req,res) => {
     await Like.remove({image : imageID})
     await cloudinary.v2.uploader.destroy(deleteImg.cloud_id)
     
-    res.redirect('/')
+    res.redirect('/profile')
     
 }
 

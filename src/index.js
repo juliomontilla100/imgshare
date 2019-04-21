@@ -1,6 +1,9 @@
 const express = require('express')
 const path = require('path')
 const exphbs = require('express-handlebars')
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
+const passport = require('passport')
 const routes = require('./routes')
 const morgan = require('morgan')
 
@@ -22,6 +25,16 @@ app.set('view engine', 'hbs')
 app.use(express.static( path.join(__dirname, 'public') ))
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
+app.use(session({ 
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    store: new MongoStore({
+        url: 'mongodb://127.0.0.1/imgshare'
+    })
+}))
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(morgan('dev'))
 
 /* routes */
