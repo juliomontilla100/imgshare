@@ -1,19 +1,21 @@
 const Comment = require('../models/comment.model')
 const Image = require('../models/image.model')
 
-let totalImages = async () => {
-    let imagesTotal = await Image.count()
+let totalImages = async (userId) => {
+
+    let imagesTotal = await Image.find({owner: userId}).countDocuments()
     return imagesTotal
 }
 
-let totalComments = async () => {
-    let commentsTotal = await Comment.count()
+let totalComments = async (userId) => {
+    let commentsTotal = await Comment.find({owner: userId}).countDocuments()
     return commentsTotal
 }
 
-let totalLikes = async () => {
+let totalLikes = async (userId) => {
     let result = await Image.aggregate(
         [
+            { $match: { owner: userId } },
             { $project: {
                 _id: 1,
                 likesTotal: {$size: '$likes'}
@@ -33,9 +35,10 @@ let totalLikes = async () => {
     
 }
 
-let totalViews = async () => {
+let totalViews = async (userId) => {
     let result = await Image.aggregate(
         [
+            { $match: { owner: userId } },
             { $group: {
                 _id: 1,
                 viewsTotal: {$sum: '$views'}
@@ -51,9 +54,10 @@ let totalViews = async () => {
 
 }
 
-let popularImages = async () => {
+let popularImages = async (userId) => {
     let images = await Image.aggregate(
         [
+            { $match: { owner: userId } },
             { $project: {
                 title: 1,
                 url: 1,
@@ -71,26 +75,28 @@ let popularImages = async () => {
     return images
 }
 
-let recentComments = async () => {
-    let comments = await Comment.find().sort({created_at : -1}).limit(5).populate('image')
+let recentComments = async (userId) => {
 
-    if(!comments){
-        return 0
-    }
-    
-    return comments
+    userId = userId.toString()
+
+    let comments = await Comment.find().populate('image').sort({created_at: -1})
+
+    let res = comments.filter( comment => comment.image.owner == userId )
+
+    return res
+
 }
 
 
-module.exports = async () => {
-    
+module.exports = async (userId) => {
+
     let result = await Promise.all([
-        totalViews(),
-        totalLikes(),
-        totalImages(),
-        totalComments(),
-        popularImages(),
-        recentComments()
+        totalViews(userId),
+        totalLikes(userId),
+        totalImages(userId),
+        totalComments(userId),
+        popularImages(userId),
+        recentComments(userId)
     ])
 
     return {

@@ -6,19 +6,22 @@ let ctrl = {}
 
 ctrl.index = async (req,res) => {
 
-    if(req.isAuthenticated()){
+    /* if(req.isAuthenticated()){
         res.render('feed')
     } else{
         res.render('index')
-    }
+    } */
+
+    res.render('index')
     
 }
 
 ctrl.profile = async (req,res) => {
     
-    let stasts = await Stasts()
+    let userID = req.user._id
+    let stasts = await Stasts(userID)
 
-    let images = await Image.find({}).sort({created_at: -1})
+    let images = await Image.find({owner: req.user._id}).sort({created_at: -1})
     res.render('profile', {images, stasts})
     
 }
@@ -45,7 +48,7 @@ ctrl.newuser = async (req,res) => {
        email: body.email,
    }).save()
 
-   res.send(newUser)
+   res.redirect('/signin')
     
 }
 
