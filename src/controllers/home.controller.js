@@ -6,13 +6,9 @@ let ctrl = {}
 
 ctrl.index = async (req,res) => {
 
-    /* if(req.isAuthenticated()){
-        res.render('feed')
-    } else{
-        res.render('index')
-    } */
+    let images = await Image.find().sort({created_at: -1}).limit(30)
 
-    res.render('index')
+    res.render('index', {images})
     
 }
 
