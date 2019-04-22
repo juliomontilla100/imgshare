@@ -30,7 +30,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     store: new MongoStore({
-        url: 'mongodb://127.0.0.1/imgshare'
+        url: 'mongodb+srv://juliomontilla100:Maracaibo123.@cluster0-fazva.mongodb.net/test?retryWrites=true'
     })
 }))
 app.use(passport.initialize())
