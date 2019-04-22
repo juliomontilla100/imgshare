@@ -29,9 +29,7 @@ app.use(session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: true,
-    store: new MongoStore({
-        url: 'mongodb+srv://juliomontilla100:Maracaibo123.@cluster0-fazva.mongodb.net/test?retryWrites=true'
-    })
+    
 }))
 app.use(passport.initialize())
 app.use(passport.session())
