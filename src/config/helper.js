@@ -16,4 +16,16 @@ helpers.isAuth = (req,res,next) => {
     }
 }
 
+helpers.isValidID = (req,res,next) => {
+
+    let imgID = req.params.img_id
+
+    if (imgID.match(/^[0-9a-fA-F]{24}$/)) {
+       next()
+    }else{
+        res.redirect('/')
+    }
+    
+}
+
 module.exports = helpers

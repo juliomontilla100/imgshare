@@ -77,11 +77,9 @@ let popularImages = async (userId) => {
 
 let recentComments = async (userId) => {
 
-    userId = userId.toString()
+    let comments = await Comment.find().populate('image').populate('owner', '-password').sort({created_at: -1})
 
-    let comments = await Comment.find().populate('image').sort({created_at: -1})
-
-    let res = comments.filter( comment => comment.image.owner == userId )
+    let res = comments.filter( comment => comment.image.owner.equals(userId) )
 
     return res
 

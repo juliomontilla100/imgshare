@@ -4,9 +4,11 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h2>{{ image.title }}</h2>
+                    {{#if options.can_delete}}
                     <a href="/images/{{image._id}}/remove" class="btn btn-danger">
                         <i class="fa fa-times"></i> Delete
                     </a>
+                    {{/if}}
                 </div>
                 <div class="card-body">
                     <p>{{ image.description }}</p>
@@ -15,9 +17,15 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-between align-items-center">
+                    {{#if options.can_like}}
                     <a href="/images/{{image._id}}/like" class="btn btn-primary" id="btn-like">
                         <i class="fas fa-thumbs-up"></i> Like
                     </a>
+                    {{else}}
+                    <a href="/images/{{image._id}}/like" class="btn btn-secondary disabled" disabled id="btn-like">
+                        <i class="fas fa-thumbs-up"></i> Like
+                    </a>
+                    {{/if}}
                     <p>
                         <span class="likes-count">{{image.likes.length}}</span>
                         <i class="fas fa-heart"></i>

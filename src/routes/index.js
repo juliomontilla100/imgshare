@@ -4,7 +4,7 @@ const homeController = require('../controllers/home.controller')
 const imageController = require('../controllers/image.controller')
 const upload = require('../config/multer')
 const passport = require('../config/passport')
-const { isAuth } = require('../config/helper')
+const { isAuth, isValidID } = require('../config/helper')
 
 const router = express.Router()
 
@@ -24,10 +24,10 @@ router.post('/signup', homeController.newuser)
 router.get('/logout', homeController.logout)
 
 /* images */
-router.get('/images/:img_id', isAuth, imageController.index)
+router.get('/images/:img_id', isAuth, isValidID, imageController.index)
 router.post('/images', isAuth, upload.single('image'), imageController.create)
-router.get('/images/:img_id/like', isAuth, imageController.like)
-router.post('/images/:img_id/comment', isAuth, imageController.comment)
-router.get('/images/:img_id/remove', isAuth, imageController.remove)
+router.get('/images/:img_id/like', isAuth, isValidID, imageController.like)
+router.post('/images/:img_id/comment', isAuth, isValidID, imageController.comment)
+router.get('/images/:img_id/remove', isAuth, isValidID, imageController.remove)
 
 module.exports = router

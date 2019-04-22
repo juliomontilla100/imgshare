@@ -4,6 +4,7 @@ const Image = require('../models/image.model')
 const Comment = require('../models/comment.model')
 const Like = require('../models/like.model')
 const Stasts = require('../utils/stasts')
+const { isValidID } = require('../config/helper')
 
 let ctrl = {}
 
@@ -11,8 +12,6 @@ ctrl.index = async (req,res) => {
 
     let userID = req.user._id
     let stasts = await Stasts(userID)
-
-    /* console.log(stasts) */
 
     let imgID = req.params.img_id
     let image = await Image.findById(imgID).populate({
@@ -22,12 +21,34 @@ ctrl.index = async (req,res) => {
         ]
     })
 
+    if(!image){
+        res.redirect('/')
+        return
+    }
+
     image.views = image.views + 1
 
     await image.save()
-
-    res.render('image', {image, stasts})
     
+    let options = {
+        can_delete : false,
+        can_like: true
+    }
+
+    if(image.owner.equals(userID)){
+        options.can_delete = true
+    }
+
+    for (let userLike of image.likes){
+
+        if(userLike.equals(userID)){
+            options.can_like = false
+        }
+        
+    }
+
+    res.render('image', {image, stasts, options})
+
 }
 
 ctrl.create = async (req,res) => {
@@ -65,7 +86,7 @@ ctrl.like = async (req,res) => {
 
     await Image.findByIdAndUpdate(
         imageID,
-        { $addToSet: { likes: newLike._id } }
+        { $addToSet: { likes: userID } }
     )
 
     res.redirect('/images/' + imageID)
